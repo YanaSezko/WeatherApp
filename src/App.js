@@ -3,6 +3,7 @@ import Info from "./components/Info";
 import Form from "./components/Form";
 import Weather from "./components/Weather";
 
+
 const API_KEY="94737880558d647a06e637fcc697bf33";
 
 class App extends React.Component {
@@ -31,28 +32,46 @@ class App extends React.Component {
       description: data.weather[0].description,
       icon: data.weather[0].icon,
       wind: data.wind.speed,
-      error:""
+      error: undefined
     });
-  }  
+  } else {
+    this.setState({
+      temp: undefined,
+      city: undefined,
+      country: undefined,
+      description:undefined,
+      icon:undefined,
+      wind: undefined,
+      error: "Введите название города"
+    });
+  }
 }
 
 
   render(){
     const iconUrl = "http://openweathermap.org/img/w/" + this.state.icon + ".png";
     return(
-      <>
-        <Info/>
-        <Form  weatherMethod={this.gettingWeather}/>
-        <Weather
-          temp={this.state.temp}
-          city={this.state.city}
-          country={this.state.country}
-          description={this.state.description}
-          icon={iconUrl}
-          wind={this.state.wind}
-          error={this.state.error}
-        />
-      </> 
+      <div className="wrapper">
+        <div className="main">
+        <div className="container">
+          <div className="row">
+            <div className = "col-sm-5 info"><Info/></div>
+            <div className="col-sm-7 form">
+              <Form  weatherMethod={this.gettingWeather}/>
+              <Weather
+              temp={this.state.temp}
+              city={this.state.city}
+              country={this.state.country}
+              description={this.state.description}
+              icon={iconUrl}
+              wind={this.state.wind}
+              error={this.state.error}
+            />
+            </div>
+          </div>
+          </div>
+        </div>
+      </div>
     )
   }
 }
