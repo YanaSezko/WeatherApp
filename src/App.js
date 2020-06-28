@@ -8,8 +8,8 @@ const API_KEY="94737880558d647a06e637fcc697bf33";
 
 class App extends React.Component {
   state = {
-    temp: undefined,
     city: undefined,
+    temp: undefined,
     country: undefined,
     description:undefined,
     icon:undefined,
@@ -18,35 +18,45 @@ class App extends React.Component {
   }
 
   gettingWeather = async(e) => {
+    try{
     e.preventDefault();
     let city = e.target.elements.city.value;
        
-  if(city)  {
     const api_url= await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric&lang=ru`)
     const data = await api_url.json();
- 
-    this.setState({
-      temp: data.main.temp,
-      city:data.name,
-      country:data.sys.country,
-      description: data.weather[0].description,
-      icon: data.weather[0].icon,
-      wind: data.wind.speed,
-      error: undefined
-    });
-  } else {
-    this.setState({
-      temp: undefined,
+    if(city){
+      this.setState({
+         city:data.name,  
+         temp: data.main.temp,
+         country:data.sys.country,
+         description: data.weather[0].description,
+         icon: data.weather[0].icon,
+         wind: data.wind.speed,
+         error: undefined
+         });
+    }else{
+      this.setState({
+        city:undefined,  
+        temp: undefined,
+        country:undefined,
+        description:undefined,
+        icon: undefined,
+        wind: undefined,
+        error: "Введите город"
+        });
+    }
+  }   
+    catch(error){
+ this.setState({
       city: undefined,
+      temp: undefined,
       country: undefined,
       description:undefined,
       icon:undefined,
       wind: undefined,
-      error: "Введите название города"
-    });
+      error: "Ошибка(Возможно такого города нет в базе данных)"});
   }
-}
-
+  }
 
   render(){
     const iconUrl = "http://openweathermap.org/img/w/" + this.state.icon + ".png";
